@@ -19,8 +19,8 @@
                 "summary": "Subsrcibe email.",
                 "parameters": [
                     {
-                        "description": "Email address",
-                        "name": "email",
+                        "description": "Email address and ListID",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -44,6 +44,9 @@
             "type": "object",
             "properties": {
                 "email": {
+                    "type": "string"
+                },
+                "listID": {
                     "type": "string"
                 }
             }
