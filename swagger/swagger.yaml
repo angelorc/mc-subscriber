@@ -1,0 +1,38 @@
+definitions:
+  server.PostRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  server.PostResponse:
+    properties:
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: The bitsong mailchimp subscriber proxy.
+  title: BitSong -> Mailchimp subscriber
+  version: "1.0"
+paths:
+  /subscribe:
+    post:
+      consumes:
+      - application/json
+      description: Subscribe an email address.
+      parameters:
+      - description: Email address
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/server.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/server.PostResponse'
+      summary: Subsrcibe email.
+swagger: "2.0"

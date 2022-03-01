@@ -1,0 +1,60 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "The bitsong mailchimp subscriber proxy.",
+        "title": "BitSong -\u003e Mailchimp subscriber",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/subscribe": {
+            "post": {
+                "description": "Subscribe an email address.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Subsrcibe email.",
+                "parameters": [
+                    {
+                        "description": "Email address",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.PostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/server.PostResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "server.PostRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.PostResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

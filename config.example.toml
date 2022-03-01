@@ -1,0 +1,6 @@
+[server]
+address="127.0.0.1:8400"
+
+[mailchimp]
+api-key=""
+list-id=""
