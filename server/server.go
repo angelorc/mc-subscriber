@@ -3,6 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"net/mail"
+	"strings"
+	"time"
+
 	"github.com/angelorc/mc-subscriber/config"
 	_ "github.com/angelorc/mc-subscriber/swagger"
 	"github.com/hanzoai/gochimp3"
@@ -10,10 +15,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"go.uber.org/zap"
-	"net/http"
-	"net/mail"
-	"strings"
-	"time"
 )
 
 type Server struct {
@@ -104,7 +105,7 @@ func (s *Server) subscribeEmail(email string) error {
 
 	req := &gochimp3.MemberRequest{
 		EmailAddress: email,
-		Status:       "pending",
+		Status:       "subscribed",
 	}
 
 	list, err := client.GetList(s.mc.ListID, nil)
