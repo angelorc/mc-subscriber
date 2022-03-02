@@ -3,6 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"net/mail"
+	"strings"
+	"time"
+
 	"github.com/angelorc/mc-subscriber/config"
 	_ "github.com/angelorc/mc-subscriber/swagger"
 	"github.com/hanzoai/gochimp3"
@@ -10,10 +15,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"go.uber.org/zap"
-	"net/http"
-	"net/mail"
-	"strings"
-	"time"
 )
 
 type Server struct {
@@ -61,7 +62,8 @@ type PostResponse struct {
 }
 
 type PostRequest struct {
-	Email string `json:"email"`
+	Email  string `json:"email"`
+	ListID string `json:"listID"`
 }
 
 // PostSubscribe godoc
@@ -70,7 +72,7 @@ type PostRequest struct {
 // @Accept json
 // @Produce json
 // @Success 200 {object} PostResponse
-// @Param email body PostRequest true "Email address"
+// @Param request body PostRequest true "Email address and ListID"
 // @Router /subscribe [post]
 func (s *Server) PostSubscribe(c echo.Context) error {
 	pr := new(PostRequest)
@@ -79,6 +81,7 @@ func (s *Server) PostSubscribe(c echo.Context) error {
 	}
 
 	email := strings.TrimSpace(pr.Email)
+	listID := strings.TrimSpace(pr.ListID)
 
 	// TODO: improve check
 	ok := isValidEmail(email)
@@ -86,7 +89,7 @@ func (s *Server) PostSubscribe(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "email not valid")
 	}
 
-	if err := s.subscribeEmail(email); err != nil {
+	if err := s.subscribeEmail(email, listID); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
@@ -98,18 +101,18 @@ func isValidEmail(email string) bool {
 	return err == nil
 }
 
-func (s *Server) subscribeEmail(email string) error {
+func (s *Server) subscribeEmail(email string, listID string) error {
 	client := gochimp3.New(s.mc.APIKey)
 	client.Timeout = 10 * time.Second
 
 	req := &gochimp3.MemberRequest{
 		EmailAddress: email,
-		Status:       "pending",
+		Status:       "subscribed",
 	}
 
-	list, err := client.GetList(s.mc.ListID, nil)
+	list, err := client.GetList(listID, nil)
 	if err != nil {
-		return fmt.Errorf("failed to get list %s", s.mc.ListID)
+		return fmt.Errorf("failed to get list %s", listID)
 	}
 
 	if _, err := list.CreateMember(req); err != nil {

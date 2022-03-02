@@ -3,6 +3,8 @@ definitions:
     properties:
       email:
         type: string
+      listID:
+        type: string
     type: object
   server.PostResponse:
     properties:
@@ -21,9 +23,9 @@ paths:
       - application/json
       description: Subscribe an email address.
       parameters:
-      - description: Email address
+      - description: Email address and ListID
         in: body
-        name: email
+        name: request
         required: true
         schema:
           $ref: '#/definitions/server.PostRequest'

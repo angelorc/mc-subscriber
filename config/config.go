@@ -2,8 +2,9 @@ package config
 
 import (
 	"fmt"
-	"github.com/naoina/toml"
 	"io/ioutil"
+
+	"github.com/naoina/toml"
 )
 
 type Config struct {
@@ -17,7 +18,6 @@ type ServerConfig struct {
 
 type MailchimpConfig struct {
 	APIKey string `toml:"api-key"`
-	ListID string `toml:"list-id"`
 }
 
 func Load(path string) (*Config, error) {
