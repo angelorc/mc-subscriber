@@ -107,7 +107,7 @@ func (s *Server) subscribeEmail(email string, listID string) error {
 
 	req := &gochimp3.MemberRequest{
 		EmailAddress: email,
-		Status:       "subscribed",
+		Status:       "pending",
 	}
 
 	list, err := client.GetList(listID, nil)
